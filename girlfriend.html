@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink-light: #ffd6e7;
+    --pink-mid: #ffb3d1;
+    --pink-deep: #ff85b3;
+    --pink-accent: #ff4d94;
+    --glass-bg: rgba(255, 255, 255, 0.35);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-shadow: rgba(255, 182, 213, 0.3);
+    --text-dark: #8b3a62;
+    --text-mid: #c26a96;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: #fff;
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Animated heart background */
+  .bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: linear-gradient(135deg, #fff 0%, #fff5f9 40%, #ffe8f2 100%);
+  }
+
+  .heart-field {
+    position: absolute;
+    inset: 0;
+  }
+
+  .heart {
+    position: absolute;
+    font-size: var(--size);
+    opacity: var(--op);
+    animation: floatHeart var(--dur) ease-in-out infinite;
+    animation-delay: var(--delay);
+    left: var(--x);
+    top: var(--y);
+    filter: blur(var(--blur));
+    user-select: none;
+    pointer-events: none;
+  }
+
+  @keyframes floatHeart {
+    0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
+    50% { transform: translateY(-18px) rotate(calc(var(--rot) + 8deg)); }
+  }
+
+  /* Screens */
+  .screen {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+  }
+
+  /* Glass card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(28px) saturate(1.8);
+    -webkit-backdrop-filter: blur(28px) saturate(1.8);
+    border: 1.5px solid rgba(255, 255, 255, 0.75);
+    border-radius: 32px;
+    box-shadow:
+      0 8px 32px rgba(255, 160, 210, 0.22),
+      0 2px 8px rgba(255, 255, 255, 0.5) inset,
+      0 -1px 2px rgba(255, 200, 230, 0.3) inset;
+    padding: 52px 56px;
+    max-width: 520px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  }
+
+  .glass-card::after {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(255, 200, 230, 0.35), transparent 70%);
+    pointer-events: none;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    color: var(--text-dark);
+    line-height: 1.35;
+    margin-bottom: 36px;
+    font-weight: 700;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--pink-accent);
+  }
+
+  .buttons {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* Glass button */
+  .btn {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(16px) saturate(2);
+    -webkit-backdrop-filter: blur(16px) saturate(2);
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50px;
+    padding: 14px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    cursor: pointer;
+    box-shadow:
+      0 4px 20px rgba(255, 150, 200, 0.2),
+      0 1px 3px rgba(255,255,255,0.6) inset;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.02em;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.4s ease;
+  }
+
+  .btn:hover::before { left: 100%; }
+
+  .btn:hover {
+    background: rgba(255, 255, 255, 0.65);
+    box-shadow:
+      0 6px 28px rgba(255, 130, 190, 0.3),
+      0 1px 3px rgba(255,255,255,0.7) inset;
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  #btn-girlfriend {
+    background: linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255, 220, 240, 0.45));
+    border-color: rgba(255, 180, 220, 0.6);
+    color: #c2507a;
+  }
+
+  #btn-mommy {
+    background: linear-gradient(135deg, rgba(255, 230, 245, 0.7), rgba(255, 190, 230, 0.5));
+    border-color: rgba(255, 160, 210, 0.7);
+    color: #8b3a62;
+    font-weight: 600;
+    transform-origin: center;
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), font-size 0.45s ease, padding 0.45s ease, box-shadow 0.2s ease, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Yay screen */
+  #screen-yay .glass-card {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 60px 56px;
+  }
+
+  .yay-hearts {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    animation: heartBeat 1.2s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.15); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.1); }
+    70% { transform: scale(1); }
+  }
+
+  .yay-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+    color: var(--text-dark);
+    line-height: 1.4;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  .yay-sub {
+    font-size: 1rem;
+    color: var(--text-mid);
+    font-weight: 300;
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  .confetti-heart {
+    position: fixed;
+    font-size: var(--size);
+    left: var(--x);
+    top: -5%;
+    animation: confettiFall var(--dur) ease-in forwards;
+    animation-delay: var(--delay);
+    pointer-events: none;
+    z-index: 20;
+    opacity: 0;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.2; }
+  }
+
+  .sparkle {
+    position: absolute;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffb3d1, #ff85b3);
+    pointer-events: none;
+    animation: sparklePop 0.6s ease forwards;
+  }
+
+  @keyframes sparklePop {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(2.5) translateY(-20px); opacity: 0; }
+  }
+
+  /* Subtle glow behind main card */
+  .card-glow {
+    position: absolute;
+    width: 340px; height: 340px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 180, 220, 0.25), transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9;
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg">
+  <div class="heart-field" id="heartField"></div>
+</div>
+
+<div class="card-glow"></div>
+
+<!-- Question Screen -->
+<div class="screen" id="screen-question">
+  <div class="glass-card">
+    <h1>are you my <em>girlfriend</em><br>or my <em>mommy</em>? 🎀</h1>
+    <div class="buttons" id="button-area">
+      <button class="btn" id="btn-girlfriend" onclick="clickGirlfriend()">girlfriend 💕</button>
+      <button class="btn" id="btn-mommy" onclick="clickMommy()">mommy 🌸</button>
+    </div>
+  </div>
+</div>
+
+<!-- Yay Screen -->
+<div class="screen hidden" id="screen-yay">
+  <div class="glass-card">
+    <span class="yay-hearts">💖💗💓💞💖</span>
+    <div class="yay-text">yayyyy you're my mommy<br>i love you so so much!!</div>
+    <div class="yay-sub">my favourite person ever 🌸✨</div>
+  </div>
+</div>
+
+<script>
+  // --- Heart Background ---
+  const heartField = document.getElementById('heartField');
+  const heartEmojis = ['♥', '🩷', '💗', '💕', '💓', '💞', '🌸'];
+  for (let i = 0; i < 55; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    const size = 12 + Math.random() * 32;
+    h.style.cssText = `
+      --size: ${size}px;
+      --op: ${0.08 + Math.random() * 0.28};
+      --dur: ${5 + Math.random() * 9}s;
+      --delay: ${-Math.random() * 10}s;
+      --x: ${Math.random() * 100}%;
+      --y: ${Math.random() * 100}%;
+      --blur: ${Math.random() < 0.4 ? Math.random() * 3 : 0}px;
+      --rot: ${Math.random() * 30 - 15}deg;
+    `;
+    h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+    heartField.appendChild(h);
+  }
+
+  // --- Button Logic ---
+  let clickCount = 0;
+  const MAX_CLICKS = 7;
+
+  const btnGF = document.getElementById('btn-girlfriend');
+  const btnMommy = document.getElementById('btn-mommy');
+
+  function clickGirlfriend() {
+    clickCount++;
+    const progress = clickCount / MAX_CLICKS;
+
+    // Scale mommy button up
+    const scale = 1 + progress * 3.2;
+    const fontSize = 1 + progress * 1.6;
+    const padding = 14 + progress * 38;
+
+    btnMommy.style.transform = `scale(${scale})`;
+    btnMommy.style.fontSize = `${fontSize}rem`;
+    btnMommy.style.padding = `${padding}px ${padding * 2.2}px`;
+    btnMommy.style.background = `linear-gradient(135deg, rgba(255,200,235,${0.7 + progress * 0.3}), rgba(255,160,215,${0.6 + progress * 0.3}))`;
+    btnMommy.style.zIndex = '5';
+    btnMommy.style.position = 'relative';
+
+    // Shrink / hide girlfriend button
+    if (progress > 0.5) {
+      const shrink = Math.max(0, 1 - (progress - 0.5) * 2);
+      btnGF.style.transform = `scale(${shrink})`;
+      btnGF.style.opacity = shrink;
+      if (progress >= 1) {
+        btnGF.style.display = 'none';
+      }
+    }
+
+    // Sparkle effect
+    spawnSparkles(btnGF);
+
+    if (clickCount >= MAX_CLICKS) {
+      btnGF.style.display = 'none';
+    }
+  }
+
+  function clickMommy() {
+    spawnConfetti();
+    setTimeout(() => {
+      document.getElementById('screen-question').classList.add('hidden');
+      document.getElementById('screen-yay').classList.remove('hidden');
+    }, 200);
+  }
+
+  function spawnSparkles(btn) {
+    const rect = btn.getBoundingClientRect();
+    for (let i = 0; i < 5; i++) {
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      s.style.left = (rect.left + Math.random() * rect.width) + 'px';
+      s.style.top = (rect.top + Math.random() * rect.height) + 'px';
+      s.style.position = 'fixed';
+      s.style.zIndex = '50';
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 700);
+    }
+  }
+
+  function spawnConfetti() {
+    const symbols = ['💖', '💗', '🩷', '✨', '🌸', '💕', '⭐'];
+    for (let i = 0; i < 38; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti-heart';
+      c.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      c.style.cssText = `
+        --size: ${14 + Math.random() * 22}px;
+        --x: ${Math.random() * 100}%;
+        --dur: ${1.8 + Math.random() * 2.2}s;
+        --delay: ${Math.random() * 1.5}s;
+      `;
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4500);
+    }
+  }
+</script>
+</body>
+</html>
